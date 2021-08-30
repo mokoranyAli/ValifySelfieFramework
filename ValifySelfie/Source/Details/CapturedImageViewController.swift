@@ -1,6 +1,6 @@
 //
 //  CapturedImageViewController.swift
-//  TesApp
+//  ValifySelfie
 //
 //  Created by Mohamed Korany on 25/08/2021.
 //
@@ -38,14 +38,16 @@ class CapturedImageViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    imageView.image = image
-    imageView.transform = CGAffineTransform(scaleX: -1, y: 1); //Flipped
-
+    configureView()
   }
+}
+
+// MARK: - IBActions
+//
+private extension CapturedImageViewController {
   
   @IBAction func doneButtonTapped(_ sender: Any) {
-    delegate?.didFinishScan(from: self, with: .success(image))
+    delegate?.didFinishScan(from: self, with: .success(imageView.image ?? image)) // This is because flipped image
   }
   
   
@@ -54,6 +56,26 @@ class CapturedImageViewController: UIViewController {
   }
 }
 
-
-
-
+// MARK: - View's Confguration
+//
+private extension CapturedImageViewController {
+  
+  func configureView() {
+    configureImageView()
+    configureDoneButton()
+    configureRecaptureButton()
+  }
+  
+  func configureImageView() {
+    imageView.image = image
+    imageView.transform = CGAffineTransform(scaleX: -1, y: 1); //Flipped
+  }
+  
+  func configureDoneButton() {
+    doneButton.setTitle("Done", for: .normal)
+  }
+  
+  func configureRecaptureButton() {
+    recaptureButton.setTitle("Take Another Photo", for: .normal)
+  }
+}

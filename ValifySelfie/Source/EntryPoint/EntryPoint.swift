@@ -1,6 +1,6 @@
 //
 //  EntryPoint.swift
-//  TestApp
+//  ValifySelfie
 //
 //  Created by Mohamed Korany on 29/08/2021.
 //
@@ -16,6 +16,7 @@ import UIKit
 ///
 public func showValify(from presenter: (UIViewController & ValifySelfieDelegate), with style: PresentationStyle = .push, animated: Bool = true) {
   let viewController = CameraViewController()
+  viewController.delegate = presenter
   
   switch style {
   case .push:

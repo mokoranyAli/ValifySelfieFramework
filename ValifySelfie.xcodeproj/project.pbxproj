@@ -8,12 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		A21082B626DBB314005A8BDE /* ValifySelfie.h in Headers */ = {isa = PBXBuildFile; fileRef = A21082B426DBB314005A8BDE /* ValifySelfie.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A21082C726DBB33B005A8BDE /* EntryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21082BF26DBB33A005A8BDE /* EntryPoint.swift */; };
+		A21082C826DBB33B005A8BDE /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21082C126DBB33A005A8BDE /* CameraViewController.swift */; };
+		A21082C926DBB33B005A8BDE /* CapturedImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A21082C326DBB33A005A8BDE /* CapturedImageViewController.xib */; };
+		A21082CA26DBB33B005A8BDE /* CapturedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21082C426DBB33A005A8BDE /* CapturedImageViewController.swift */; };
+		A21082CB26DBB33B005A8BDE /* ValifySelfieDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21082C626DBB33B005A8BDE /* ValifySelfieDelegate.swift */; };
+		A21082CF26DBB370005A8BDE /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21082CE26DBB370005A8BDE /* UIViewController+Toast.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A21082B126DBB314005A8BDE /* ValifySelfie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ValifySelfie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A21082B426DBB314005A8BDE /* ValifySelfie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValifySelfie.h; sourceTree = "<group>"; };
 		A21082B526DBB314005A8BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A21082BF26DBB33A005A8BDE /* EntryPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryPoint.swift; sourceTree = "<group>"; };
+		A21082C126DBB33A005A8BDE /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		A21082C326DBB33A005A8BDE /* CapturedImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CapturedImageViewController.xib; sourceTree = "<group>"; };
+		A21082C426DBB33A005A8BDE /* CapturedImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapturedImageViewController.swift; sourceTree = "<group>"; };
+		A21082C626DBB33B005A8BDE /* ValifySelfieDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValifySelfieDelegate.swift; sourceTree = "<group>"; };
+		A21082CE26DBB370005A8BDE /* UIViewController+Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +58,64 @@
 		A21082B326DBB314005A8BDE /* ValifySelfie */ = {
 			isa = PBXGroup;
 			children = (
+				A21082CD26DBB370005A8BDE /* Extension */,
+				A21082BD26DBB31F005A8BDE /* Source */,
 				A21082B426DBB314005A8BDE /* ValifySelfie.h */,
 				A21082B526DBB314005A8BDE /* Info.plist */,
 			);
 			path = ValifySelfie;
+			sourceTree = "<group>";
+		};
+		A21082BD26DBB31F005A8BDE /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				A21082C026DBB33A005A8BDE /* Camera */,
+				A21082C526DBB33B005A8BDE /* Delegate */,
+				A21082C226DBB33A005A8BDE /* Details */,
+				A21082BE26DBB33A005A8BDE /* EntryPoint */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		A21082BE26DBB33A005A8BDE /* EntryPoint */ = {
+			isa = PBXGroup;
+			children = (
+				A21082BF26DBB33A005A8BDE /* EntryPoint.swift */,
+			);
+			path = EntryPoint;
+			sourceTree = "<group>";
+		};
+		A21082C026DBB33A005A8BDE /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				A21082C126DBB33A005A8BDE /* CameraViewController.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		A21082C226DBB33A005A8BDE /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				A21082C326DBB33A005A8BDE /* CapturedImageViewController.xib */,
+				A21082C426DBB33A005A8BDE /* CapturedImageViewController.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		A21082C526DBB33B005A8BDE /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				A21082C626DBB33B005A8BDE /* ValifySelfieDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		A21082CD26DBB370005A8BDE /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				A21082CE26DBB370005A8BDE /* UIViewController+Toast.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +186,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A21082C926DBB33B005A8BDE /* CapturedImageViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +197,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A21082C726DBB33B005A8BDE /* EntryPoint.swift in Sources */,
+				A21082CF26DBB370005A8BDE /* UIViewController+Toast.swift in Sources */,
+				A21082C826DBB33B005A8BDE /* CameraViewController.swift in Sources */,
+				A21082CA26DBB33B005A8BDE /* CapturedImageViewController.swift in Sources */,
+				A21082CB26DBB33B005A8BDE /* ValifySelfieDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

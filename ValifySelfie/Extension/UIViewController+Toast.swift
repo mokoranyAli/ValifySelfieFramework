@@ -11,19 +11,13 @@ import UIKit
 //
 extension UIViewController {
   
-    func showToast(message: String) {
+  func showToast(message: String, duration: ToastDuration = .long) {
         guard let window = UIApplication.shared.keyWindow else {
             return
         }
         
-        let toastLbl = UILabel()
+        let toastLbl = createToastLabel()
         toastLbl.text = message
-        toastLbl.textAlignment = .center
-        toastLbl.font = UIFont.systemFont(ofSize: 18)
-        toastLbl.textColor = UIColor.white
-        toastLbl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        toastLbl.numberOfLines = 0
-        
         
         let textSize = toastLbl.intrinsicContentSize
         let labelHeight = ( textSize.width / window.frame.width ) * 30
@@ -37,12 +31,37 @@ extension UIViewController {
         
         window.addSubview(toastLbl)
         
-        UIView.animate(withDuration: 3.0, animations: {
+    UIView.animate(withDuration: duration.duration, animations: {
             toastLbl.alpha = 0
         }) { (_) in
             toastLbl.removeFromSuperview()
         }
-        
-        
     }
+  
+  private func createToastLabel() -> UILabel {
+    let toastLbl = UILabel()
+    toastLbl.textAlignment = .center
+    toastLbl.font = UIFont.systemFont(ofSize: 18)
+    toastLbl.textColor = UIColor.white
+    toastLbl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+    toastLbl.numberOfLines = 0
+    return toastLbl
+  }
+}
+
+// MARK: - Toast + Duration
+//
+ enum ToastDuration {
+  
+  case short
+  case long
+  
+  var duration: TimeInterval {
+    switch self {
+    case .long:
+    return 3
+    case .short:
+    return 1
+    }
+  }
 }

@@ -1,6 +1,6 @@
 //
 //  ValifySelfieDelegate.swift
-//  TestApp
+//  ValifySelfie
 //
 //  Created by Mohamed Korany on 29/08/2021.
 //

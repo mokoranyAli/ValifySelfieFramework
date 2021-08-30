@@ -1,6 +1,6 @@
 //
 //  CameraViewController.swift
-//  TesApp
+//  ValifySelfie
 //
 //  Created by Mohamed Korany on 25/08/2021.
 //
@@ -28,12 +28,18 @@ class CameraViewController: UIViewController {
   private var takingAPicture = false
   private var drawings: [CAShapeLayer] = []
   
+  weak var delegate: ValifySelfieDelegate?
   
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
     configureView()
+  }
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    
     checkPermissions()
   }
 }
@@ -41,35 +47,31 @@ class CameraViewController: UIViewController {
 // MARK: - Camera Setup
 //
 private extension CameraViewController {
+  
   func setupAndStartCaptureSession() {
-    DispatchQueue.global(qos: .userInitiated).async{
-      //init session
-      self.captureSession = AVCaptureSession()
-      //start configuration
-      self.captureSession.beginConfiguration()
-      
-      //session specific configuration
-      if self.captureSession.canSetSessionPreset(.photo) {
-        self.captureSession.sessionPreset = .photo
-      }
-      self.captureSession.automaticallyConfiguresCaptureDeviceForWideColor = true
-      
-      //setup inputs
-      self.setupInputs()
-      
-      DispatchQueue.main.async {
-        //setup preview layer
-        self.setupPreviewLayer()
-      }
-      
-      //setup output
-      self.setupOutput()
-      
-      //commit configuration
-      self.captureSession.commitConfiguration()
-      //start running it
-      self.captureSession.startRunning()
+    
+    //init session
+    captureSession = AVCaptureSession()
+    //start configuration
+    captureSession.beginConfiguration()
+    
+    //session specific configuration
+    if captureSession.canSetSessionPreset(.photo) {
+      captureSession.sessionPreset = .photo
     }
+    captureSession.automaticallyConfiguresCaptureDeviceForWideColor = true
+    
+    //setup inputs
+    self.setupInputs()
+    self.setupPreviewLayer()
+    
+    //setup output
+    self.setupOutput()
+    
+    //commit configuration
+    self.captureSession.commitConfiguration()
+    //start running it
+    self.captureSession.startRunning()
   }
   
   func setupInputs() {
@@ -149,7 +151,7 @@ extension CameraViewController {
     captureButton.addTarget(self, action: #selector(takePicktureTapped(_:)), for: .touchUpInside)
   }
   
-  func setupPreviewLayer(){
+  func setupPreviewLayer() {
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     view.layer.insertSublayer(previewLayer, below: navigationController?.view.layer)
     previewLayer.frame = self.view.layer.frame
@@ -169,7 +171,7 @@ private extension CameraViewController {
       
     case .notDetermined, .denied, .restricted:
       AVCaptureDevice.requestAccess(for: .video) { authorized in
-        authorized ? self.setupAndStartCaptureSession() : self.didReceiveError("Access Camera Not Authorized")
+        self.handleRequestCameraAccess(isAuthorized: authorized)
       }
     @unknown default:
       return
@@ -182,49 +184,54 @@ private extension CameraViewController {
     }
   }
   
-  func takePicture() {
-    guard takingAPicture else {
-      return
-    }
-    
+  func handleRequestCameraAccess(isAuthorized: Bool) {
     DispatchQueue.main.async {
-      // Try and get a CVImageBuffer out of the sample buffer
-      guard let cvBuffer = CMSampleBufferGetImageBuffer(self.sampleBuffer) else {
-        return
-      }
-      
-      // Get a CIImage out of the CVImageBuffer
-      let ciImage = CIImage(cvImageBuffer: cvBuffer)
-      
-      //get UIImage out of CIImage
-      let uiImage = UIImage(ciImage: ciImage).withHorizontallyFlippedOrientation()
-      
-      
-      let options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
-      let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)!
-      let faces = faceDetector.features(in: ciImage)
-      
-      guard faces.first != nil  else {
-        
-        self.takingAPicture = false
-        self.didReceiveError("No Face Found")
-        return
-      }
-      
-      guard faces.count == 1 else {
-        self.takingAPicture = false
-        self.didReceiveError("A lot of faces are detected..!")
-        return
-      }
-      
-      self.takingAPicture = false
-      self.showDetailsScreen(with: uiImage)
+      isAuthorized ? self.setupAndStartCaptureSession() : self.didReceiveError("Access Camera Not Authorized")
     }
   }
   
+  func takePicture() {
+    guard takingAPicture, sampleBuffer != nil else {
+      return
+    }
+    
+    // Try and get a CVImageBuffer out of the sample buffer
+    guard let cvBuffer = CMSampleBufferGetImageBuffer(self.sampleBuffer) else {
+      return
+    }
+    
+    // Get a CIImage out of the CVImageBuffer
+    let ciImage = CIImage(cvImageBuffer: cvBuffer)
+    
+    //get UIImage out of CIImage
+    let uiImage = UIImage(ciImage: ciImage).withHorizontallyFlippedOrientation()
+    
+    
+    let options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+    let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)!
+    let faces = faceDetector.features(in: ciImage)
+    
+    guard faces.first != nil  else {
+      
+      self.takingAPicture = false
+      self.didReceiveError("No Face Found")
+      return
+    }
+    
+    guard faces.count == 1 else {
+      self.takingAPicture = false
+      self.didReceiveError("A lot of faces are detected..! \n We need only one face")
+      return
+    }
+    
+    self.takingAPicture = false
+    self.showDetailsScreen(with: uiImage)
+  }
+  
   func showDetailsScreen(with image: UIImage) {
-    let vc = CapturedImageViewController(image: image)
-    self.navigationController?.pushViewController(vc, animated: true)
+    let detailsScreen = CapturedImageViewController(image: image)
+    detailsScreen.delegate = delegate
+    self.navigationController?.pushViewController(detailsScreen, animated: true)
   }
 }
 
